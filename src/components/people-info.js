@@ -1,37 +1,29 @@
 import Store from "../store";
+import ListComponent from "./list";
+import DetailsPage from "../pages/details";
 const PeopleInfo = (context, router) => {
   console.log(context);
 
+  const page = new DetailsPage('People');
 
 
-  let people = [];
-  const $ = {
-    leftSide: () => document.querySelector('#left-side'),
-    rightSide: () => document.querySelector('#right-side'),
-  }
+  let items = [];
+
   
 
-  people = Store.people;
-
-      const person = people[context.data.id - 1];
-
-
-      router.updatePageLinks();     
-
+  Store.fetchPeople()
+    .then(data => {
       
 
+      items = data.results;
 
-  
-  return `
-<h2>People page</h2>
-<div class="page-wrapper">
-<div id="left-side">
-<ul>
-${people.map((p,idx) => `<li><a href='/people/${idx+1}' data-navigo>${p.name}</a></li>`).join('')}
-</ul>
-</div>
-    <div id="right-side">
-      <h1>${person.name}</h1>
+
+
+
+      const person = items[context.data.id - 1];
+
+      page.$.rightSide().innerHTML = `
+      <h1 class="hello">${person.name}</h1>
 <p>Birth year: ${person.birth_year}</p>
 <p>Eye color: ${person.eye_color}</p>
 <p>Hair color: ${person.hair_color}</p>
@@ -43,9 +35,18 @@ ${people.map((p,idx) => `<li><a href='/people/${idx+1}' data-navigo>${p.name}</a
 <ul>
 ${person.films.map(f => `<li><a href="${f.replace('https://swapi.dev/api','')}">${f}</a></li>`).join('')}
 </ul>
-</div>
-</div>
 `
+
+            router.updatePageLinks();     
+    });
+
+  return page.render();
+
+      
+
+
+  
+
 }
 
 export default PeopleInfo;

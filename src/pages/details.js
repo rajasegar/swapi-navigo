@@ -1,8 +1,7 @@
-class PageWrapper {
+class DetailsPage {
   constructor(title) {
     this.title = title;
     this.$ = {
-      leftSide: () => document.querySelector('#left-side'),
       rightSide: () => document.querySelector('#right-side'),
     }
   }
@@ -11,8 +10,6 @@ class PageWrapper {
     return `
 <h2>${this.title} page</h2>
 <div class="page-wrapper">
-<div id="left-side">
-</div>
 <div id="right-side">
 </div>
 </div>
@@ -20,4 +17,4 @@ class PageWrapper {
   }
 }
 
-export default PageWrapper;
+export default DetailsPage;

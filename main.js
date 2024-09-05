@@ -6,6 +6,7 @@ import PlanetComponent from './src/components/planet';
 import PeopleInfo from './src/components/people-info';
 import PlanetInfo from './src/components/planet-info';
 
+const $root = document.querySelector('#app');
 const router = new Navigo('/');
 
 
@@ -16,13 +17,22 @@ router.on('/planets/:id', planetsInfoRoute)
 router.on('/people/:id', peopleInfoRoute)
 router.resolve();
 
-
-function index () {
-  document.querySelector('#app').innerHTML = AppComponent();
+function updateNavbar() {
+  
 }
 
-function people () {
-  document.querySelector('#app').innerHTML = PeopleComponent(router);
+
+
+function index () {
+  const App = new AppComponent(document.querySelector('#app'));
+  App.render();
+
+}
+
+function people ({data, params, queryString}) {
+  const People = new PeopleComponent($root, router, params);
+  People.init();
+
 }
 
 function peopleInfoRoute(data) {
@@ -30,10 +40,12 @@ function peopleInfoRoute(data) {
 }
 
 function planetsInfoRoute(data) {
-    document.querySelector('#app').innerHTML = PlanetInfo(data);
+  document.querySelector('#app').innerHTML = PlanetInfo(data, router);
 }
 
 
-function planets () {
-  document.querySelector('#app').innerHTML = PlanetComponent();
+function planets ({params}) {
+  const Planet = new PlanetComponent($root, router, params);
+  Planet.init();
+
 }

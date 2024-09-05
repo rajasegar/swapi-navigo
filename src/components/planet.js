@@ -1,28 +1,54 @@
-const PlanetComponent = () => {
+import Store from "../store";
+import ListComponent from "./list";
+import Pagination from "./pagination";
 
-  let planets = [];
-  const $ = {
-    leftSide: () => document.querySelector('#left-side'),
+export default class PlanetComponent {
+  constructor($root, router, params) {
+    this.$root = $root;
+    this.router = router;
+    this.pageNo = params?.page || 1;
+
+    this.$ = {
+            leftSide: () => $root.querySelector('#left-side'),
+      loader: () => $root.querySelector('#loader'),
+      pagination: () => $root.querySelector('#pagination'),
+      showLoader() {
+        this.loader().hidden = false;
+      },
+      hideLoader() {
+        this.loader().hidden = true;
+      }
+    }
+
+    this.init();
   }
-  
-  fetch('https://swapi.dev/api/planets')
-    .then(res => res.json())
-    .then(data => {
-      console.log(data)
-      planets = data.results;
-      $.leftSide().innerHTML = `<ul>
-${planets.map((p,idx) => `<li><a href='/planets/${idx+1}' data-navigo>${p.name}</a></li>`).join('')}
-</ul>`
-    })
 
-  
-  return `
+  init() {
+    this.render();
+    this.$.showLoader();
+        Store.fetchPlanets(this.pageNo)
+      .then(data => {
+        const perPage = 10;
+        const totalPages = Math.ceil(data.count / perPage);
+        const pages = new Array(totalPages).fill("/planets/?page=");
+
+        this.$.hideLoader();
+        this.$.leftSide().innerHTML = ListComponent(data.results, 'people')
+        this.$.pagination().innerHTML =  Pagination(data.count, perPage,pages, this.pageNo);
+
+        this.router.updatePageLinks();
+      })
+  }
+
+  render() {
+    this.$root.innerHTML = `
 <h2>Planet page</h2>
+<p id="loader">Loading...</p>
 <div id="left-side">
 </div>
-<div id="right-side">
-</div>
+<div id="pagination"></div>
 `
+  }
 }
 
-export default PlanetComponent;
+

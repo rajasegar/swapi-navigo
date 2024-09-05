@@ -1,35 +1,37 @@
-import PageWrapper from "./page-wrapper";
+import DetailsPage from "../pages/details"
+import Store from "../store";
+import ListComponent from "./list";
 
-const PlanetInfo = (context) => {
+const PlanetInfo = (context, router) => {
   console.log(context);
 
-  const page = new PageWrapper('Planet');
+  const page = new DetailsPage('Planet');
 
   let items = [];
 
-  
-  fetch('https://swapi.dev/api/planets')
-    .then(res => res.json())
+
+  Store.fetchPlanetById(context.data.id)
     .then(data => {
       console.log(data)
-      items = data.results;
-      page.$.leftSide().innerHTML = `<ul>
-${items.map((p,idx) => `<li><a href='/planets/${idx+1}' data-navigo>${p.name}</a></li>`).join('')}
-</ul>`
-      const person = items[context.data.id - 1];
-      page.$.rightSide().innerHTML = `<h1>${person.name}</h1>
-<p>Climate: ${person.climate}</p>
-<p>Diameter: ${person.diameter}</p>
-<p>Hair color: ${person.hair_color}</p>
-<p>Height: ${person.height}</p>
-<p>Mass: ${person.mass}</p>
-<p>Skin color: ${person.skin_color}</p>
+  
+      const planet = data; 
+ 
+  
+      page.$.rightSide().innerHTML = `<h1>${planet.name}</h1>
+<p>Climate: ${planet.climate}</p>
+<p>Diameter: ${planet.diameter}</p>
+<p>Hair color: ${planet.hair_color}</p>
+<p>Height: ${planet.height}</p>
+<p>Mass: ${planet.mass}</p>
+<p>Skin color: ${planet.skin_color}</p>
 
 <p>Films:</p>
 <ul>
-${person.films.map(f => `<li><a href="${f.replace('https://swapi.dev/api','')}">${f}</a></li>`).join('')}
+${planet.films.map(f => `<li><a href="${f.replace('https://swapi.dev/api','')}">${f}</a></li>`).join('')}
 </ul>
 `
+
+      router.updatePageLinks();
     })
 
   
