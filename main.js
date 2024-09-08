@@ -12,6 +12,7 @@ const router = new Navigo('/');
 
 router.hooks({
   before(done,match) {
+    console.log(match);
     renderNav(`/${match.url}`);
     done();
   },
@@ -27,10 +28,6 @@ router.on('/vehicles', vehicles);
 
 router.resolve();
 
-
-
-
-
 function index () {
   const App = new AppComponent(document.querySelector('#app'));
   App.render();
@@ -40,25 +37,20 @@ function index () {
 function people ({data, params, queryString}) {
   const People = new PeopleComponent($root, router, params);
   People.init();
-
-
 }
 
 function peopleInfoRoute(data) {
   document.querySelector('#app').innerHTML = PeopleInfo(data, router);
-
 }
 
 function planetsInfoRoute(data) {
   document.querySelector('#app').innerHTML = PlanetInfo(data, router);
-
 }
 
 
 function planets ({params}) {
   const Planet = new PlanetComponent($root, router, params);
   Planet.init();
-
 }
 
 function films() {
@@ -71,6 +63,7 @@ function vehicles() {
 
 function renderNav(url) {
 
+  console.log(url);
   const $navbar = document.querySelector('#navbar');
   const routes = [
     {
@@ -100,7 +93,7 @@ function renderNav(url) {
   
   $navbar.innerHTML = `
   ${routes.map((r,i) => {
-    const classList = url               == r.url ? activeClass : defaultClass;
+    const classList = url == r.url  ? activeClass : defaultClass;
     return `<a href="${r.url}" class="rounded-md px-3 py-2 text-sm font-medium ${classList}" data-navigo>${r.name}</a>`})}
 `
 

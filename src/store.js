@@ -23,6 +23,10 @@ const Store = {
 
   async fetchPlanetById(id) {
     return this.fetchData(`https://swapi.dev/api/planets/${id}`)
+  },
+
+  async fetchPeopleById(id) {
+    return this.fetchData(`https://swapi.dev/api/people/${id}`)
   }
 }
 

@@ -33,7 +33,7 @@ export default class PlanetComponent {
         const pages = new Array(totalPages).fill("/planets/?page=");
 
         this.$.hideLoader();
-        this.$.leftSide().innerHTML = ListComponent(data.results, 'people')
+        this.$.leftSide().innerHTML = ListComponent(data.results, 'planets')
         this.$.pagination().innerHTML =  Pagination(data.count, perPage,pages, this.pageNo);
 
         this.router.updatePageLinks();
