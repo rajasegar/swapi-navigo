@@ -94,7 +94,7 @@ function renderNav(url) {
   $navbar.innerHTML = `
   ${routes.map((r,i) => {
     const classList = url == r.url  ? activeClass : defaultClass;
-    return `<a href="${r.url}" class="rounded-md px-3 py-2 text-sm font-medium ${classList}" data-navigo>${r.name}</a>`})}
+    return `<a href="${r.url}" class="rounded-md px-3 py-2 text-sm font-medium ${classList}" data-navigo>${r.name}</a>`}).join('')}
 `
 
   router.updatePageLinks();
